@@ -1,1 +1,60 @@
-{"movies":[{"id":1,"title":"הסרט המשפחתי - חופש הגדול","imageUrl":"https://drive.google.com/uc?export=download&id=1Q9vWka0iCHljqg4vLYl4wakIlpryQnKU","videoUrl":"https://drive.google.com/uc?export=download&id=1Q9vWka0iCHljqg4vLYl4wakIlpryQnKU"},{"id":2,"title":"ההרפתקה של איתי","imageUrl":"https://drive.google.com/uc?export=download&id=1cmvJ0XDYoT4Thh5YsFAHCso2rcqdTqIv","videoUrl":"https://drive.google.com/uc?export=download&id=1cmvJ0XDYoT4Thh5YsFAHCso2rcqdTqIv"}]}
+{
+  "movies": [
+    {
+      "id": 1,
+      "title": "אקוומן 1",
+      "year": 2018,
+      "genre": "פעולה, הרפתקאות, פנטזיה",
+      "description": "ארתור קורי לומד שהוא יורש העצר של ממלכת אטלנטיס התת-ימית ועליו למנוע מלחמה בין העולם העילי לתת-ימי.",
+      "videoUrl": "https://drive.google.com/uc?export=download&id=17WvZJfgQqEmzSWNq6ebPopAksCRreKM2"
+    },
+    {
+      "id": 2,
+      "title": "אקוומן 2",
+      "year": 2023,
+      "genre": "פעולה, הרפתקאות, פנטזיה",
+      "description": "אקוומן חוזר להגן על אטלנטיס ועל העולם מפני איומים חדשים, תוך התמודדות עם תפקידו כבעל וכאב.",
+      "videoUrl": "https://drive.google.com/uc?export=download&id=1ixOGufGi9FmkDCeaIMBpvMo3d0fRgpF8"
+    },
+    {
+      "id": 3,
+      "title": "הקול בראש 1",
+      "year": 2015,
+      "genre": "הנפשה, קומדיה, דרמה",
+      "description": "בתוך מוחה של ילדה בשם ריילי פועלות רגשות – שמחה, עצב, פחד, כעס וגועל – שמנסות לנווט אותה בחיים.",
+      "videoUrl": "https://drive.google.com/uc?export=download&id=1EQw0xfRyQpUv7Gf12_7wwS-wnM20NZbJ"
+    },
+    {
+      "id": 4,
+      "title": "הקול בראש 2",
+      "year": 2024,
+      "genre": "הנפשה, קומדיה, דרמה",
+      "description": "ריילי מתבגרת ורגשות חדשים כמו חרדה, קנאה ושעמום מצטרפים לשליטה במוחה, מה שיוצר כאוס מרגש ומצחיק.",
+      "videoUrl": "https://drive.google.com/uc?export=download&id=1EqMbSpEKj4lHhc_UYbZ1cMRSbIU-KBlp"
+    },
+    {
+      "id": 5,
+      "title": "ונום 1",
+      "year": 2018,
+      "genre": "פעולה, מדע בדיוני, אימה",
+      "description": "עיתונאי חוקר נדבק בחייזר סימביוט שנותן לו כוחות על, והם יחד חייבים להגן על כדור הארץ.",
+      "videoUrl": "https://drive.google.com/uc?export=download&id=1WE12z3mMPM988keahqDnMbSK9n_NmSRb"
+    },
+    {
+      "id": 6,
+      "title": "ונום 2",
+      "year": 2021,
+      "genre": "פעולה, מדע בדיוני, אימה",
+      "description": "ונום ואדי ברוק מתמודדים עם רוצח סדרתי שנדבק בסימביוט חזק אף יותר – קרנג'.",
+      "videoUrl": "https://drive.google.com/uc?export=download&id=19-Q67Xu57wPcBTqdTifbYvArMcVok0UE"
+    },
+    {
+      "id": 7,
+      "title": "ונום 3",
+      "year": 2024,
+      "genre": "פעולה, מדע בדיוני, אימה",
+      "description": "הסרט האחרון בטרילוגיית ונום, בו אדי ונום מתמודדים עם אויבים חדשים ועם גורל הקשר המוזר ביניהם.",
+      "videoUrl": "https://drive.google.com/uc?export=download&id=10Ta3IF_ImZ-RHc7kDjYwj3tJ_5F2rPlc"
+    }
+  ]
+}
