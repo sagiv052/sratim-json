@@ -1,0 +1,19 @@
+{
+  "movies": [
+    {
+      "id": 1,
+      "title": "ספיידרמן 1",
+      "image": "https://your-images.com/spiderman1.jpg"
+    },
+    {
+      "id": 2,
+      "title": "ספיידרמן 2",
+      "image": "https://your-images.com/spiderman2.jpg"
+    },
+    {
+      "id": 3,
+      "title": "ספיידרמן 3",
+      "image": "https://your-images.com/spiderman3.jpg"
+    }
+  ]
+}
