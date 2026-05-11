@@ -2,18 +2,21 @@
   "movies": [
     {
       "id": 1,
-      "title": "ספיידרמן 1",
-      "image": "https://your-images.com/spiderman1.jpg"
+      "title": "G20",
+      "profileImage": "https://m.media-amazon.com/images/M/MV5BMTc5MTg3MTEtNzQwMi00Y2VkLWI4N2UtNDdmMzFjMGIyNTEzXkEyXkFqcGc@._V1_.jpg",
+      "backgroundImage": "https://m.media-amazon.com/images/S/pv-target-images/a2ec8ed0307a007bb7eed80724c0bdfc4a8723217cc31b606509c73678117dc9._UR1920,1080_CLs%7C1920,1080%7C/G/bundle/BottomRightCardGradient16x9RTL.png,/G/01/digital/video/merch/subs/benefit-id/m-r/Prime/logos/channels-logo-white.png%7C0,0,1920,1080+0,0,1920,1080+78,847,263,156_kvf21cb47db8d34aa971cd86f57a65cf8d_.jpg"
     },
     {
       "id": 2,
-      "title": "ספיידרמן 2",
-      "image": "https://your-images.com/spiderman2.jpg"
+      "title": "ספיידרמן אין דרך הביתה",
+      "profileImage": "https://upload.wikimedia.org/wikipedia/he/8/82/Spider-Man_No_Way_Home.jpg",
+      "backgroundImage": "https://images.thedirect.com/media/article_full/spid-blu-ray.jpg"
     },
     {
       "id": 3,
       "title": "ספיידרמן 3",
-      "image": "https://your-images.com/spiderman3.jpg"
+      "profileImage": "https://your-images.com/spiderman3_small.jpg",
+      "backgroundImage": "https://your-images.com/spiderman3_background.jpg"
     }
   ]
 }
