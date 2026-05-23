@@ -3,14 +3,17 @@
     {
       "username": "qbzn1999",
       "password": "Nty12345"
+      "vip": "true"
     },
     {
       "username": "moshe123",
       "password": "moshe1234"
+      "vip": "false"
     },
     {
       "username": "משתמש3",
       "password": "5678"
+      "vip": "false"
     }
   ]
 }
