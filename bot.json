@@ -1,54 +1,572 @@
 {
-  "version": 2,
-  "defaultResponse": "לא הבנתי. נסה: 'תציע לי סרט אקשן', 'טרנדים', 'חיפוש סרט אינדיאנה ג'ונס'",
+  "version": "2.0.0",
+  "last_updated": "2026-01-15",
+  "tmdb_api_key": "2c055b2f4708fe069b3104e21e509cb9",
+  "tmdb_access_token": "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyYzA1NWIyZjQ3MDhmZTA2OWIzMTA0ZTIxZTUwOWNiOSIsIm5iZiI6MTc3NDY4NzU1OS4yNDUsInN1YiI6IjY5Yzc5NTQ3ZDg5ZGUwMjcyOTUwZWJiMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.GIf02GMzIedhfB-uoDWawXIvsjXN1QVCdazFxuEaWNI",
+  "endpoints": {
+    "base_url": "https://api.themoviedb.org/3",
+    "image_base_url": "https://image.tmdb.org/t/p/w500",
+    "youtube_base_url": "https://www.youtube.com/watch?v=",
+    "genres": {
+      "action": 28,
+      "adventure": 12,
+      "animation": 16,
+      "comedy": 35,
+      "crime": 80,
+      "documentary": 99,
+      "drama": 18,
+      "family": 10751,
+      "fantasy": 14,
+      "history": 36,
+      "horror": 27,
+      "music": 10402,
+      "mystery": 9648,
+      "romance": 10749,
+      "science_fiction": 878,
+      "thriller": 53,
+      "war": 10752,
+      "western": 37,
+      "action_tv": 10759,
+      "sci_fi_tv": 10765
+    }
+  },
   "commands": [
     {
-      "keywords": ["תציע", "סרט", "אקשן", "קומדיה", "אימה", "דרמה"],
-      "response": "מחפש סרט מומלץ...",
-      "action": "suggest",
-      "genre": null
+      "id": "get_action_movies",
+      "name": "סרטי אקשן",
+      "description": "מחזיר סרטי אקשן פופולריים",
+      "url": "/discover/movie",
+      "params": {
+        "with_genres": 28,
+        "sort_by": "popularity.desc",
+        "language": "he-IL",
+        "page": 1
+      }
     },
     {
-      "keywords": ["טרנדים", "פופולרי", "מה חם"],
-      "response": "טוען טרנדים...",
-      "action": "trending",
-      "genre": null
+      "id": "get_comedy_movies",
+      "name": "סרטי קומדיה",
+      "description": "מחזיר סרטי קומדיה פופולריים",
+      "url": "/discover/movie",
+      "params": {
+        "with_genres": 35,
+        "sort_by": "popularity.desc",
+        "language": "he-IL",
+        "page": 1
+      }
     },
     {
-      "keywords": ["חיפוש", "חפש", "סרט"],
-      "response": "איזה סרט לחפש?",
-      "action": "search_movie",
-      "genre": null
+      "id": "get_horror_movies",
+      "name": "סרטי אימה",
+      "description": "מחזיר סרטי אימה פופולריים",
+      "url": "/discover/movie",
+      "params": {
+        "with_genres": 27,
+        "sort_by": "popularity.desc",
+        "language": "he-IL",
+        "page": 1
+      }
     },
     {
-      "keywords": ["חיפוש", "חפש", "סדרה"],
-      "response": "איזו סדרה לחפש?",
-      "action": "search_tv",
-      "genre": null
+      "id": "get_romance_movies",
+      "name": "סרטי רומנטיקה",
+      "description": "מחזיר סרטי רומנטיקה פופולריים",
+      "url": "/discover/movie",
+      "params": {
+        "with_genres": 10749,
+        "sort_by": "popularity.desc",
+        "language": "he-IL",
+        "page": 1
+      }
     },
     {
-      "keywords": ["טריילר", "תראה טריילר"],
-      "response": "לאיזה סרט?",
-      "action": "trailer",
-      "genre": null
+      "id": "get_sci_fi_movies",
+      "name": "סרטי מדע בדיוני",
+      "description": "מחזיר סרטי מדע בדיוני פופולריים",
+      "url": "/discover/movie",
+      "params": {
+        "with_genres": 878,
+        "sort_by": "popularity.desc",
+        "language": "he-IL",
+        "page": 1
+      }
     },
     {
-      "keywords": ["שלום", "היי", "מה קורה"],
-      "response": "שלום! 🎬 איך אפשר לעזור?",
-      "action": null,
-      "genre": null
+      "id": "get_drama_movies",
+      "name": "סרטי דרמה",
+      "description": "מחזיר סרטי דרמה פופולריים",
+      "url": "/discover/movie",
+      "params": {
+        "with_genres": 18,
+        "sort_by": "popularity.desc",
+        "language": "he-IL",
+        "page": 1
+      }
     },
     {
-      "keywords": ["תודה", "thanks"],
-      "response": "בכיף! תהנה מהסרט 🍿",
-      "action": null,
-      "genre": null
+      "id": "get_action_tv",
+      "name": "סדרות אקשן",
+      "description": "מחזיר סדרות אקשן פופולריות",
+      "url": "/discover/tv",
+      "params": {
+        "with_genres": 10759,
+        "sort_by": "popularity.desc",
+        "language": "he-IL",
+        "page": 1
+      }
     },
     {
-      "keywords": ["עזרה", "help"],
-      "response": "📋 אני יודע: להציע סרטים לפי ז'אנר, להראות טרנדים, לחפש סרטים/סדרות, ולהביא טריילרים. תנסה!",
-      "action": null,
-      "genre": null
+      "id": "search_movie",
+      "name": "חיפוש סרט",
+      "description": "מחפש סרט לפי שם",
+      "url": "/search/movie",
+      "params": {
+        "query": "{search_term}",
+        "language": "he-IL",
+        "page": 1
+      },
+      "requires_input": true
+    },
+    {
+      "id": "search_tv",
+      "name": "חיפוש סדרה",
+      "description": "מחפש סדרה לפי שם",
+      "url": "/search/tv",
+      "params": {
+        "query": "{search_term}",
+        "language": "he-IL",
+        "page": 1
+      },
+      "requires_input": true
+    },
+    {
+      "id": "search_multi",
+      "name": "חיפוש כללי",
+      "description": "מחפש גם בסרטים וגם בסדרות",
+      "url": "/search/multi",
+      "params": {
+        "query": "{search_term}",
+        "language": "he-IL",
+        "page": 1
+      },
+      "requires_input": true
+    },
+    {
+      "id": "get_movie_details",
+      "name": "פרטי סרט",
+      "description": "מחזיר מידע מלא על סרט ספציפי",
+      "url": "/movie/{movie_id}",
+      "params": {
+        "language": "he-IL",
+        "append_to_response": "credits,videos,similar,recommendations"
+      },
+      "requires_id": true
+    },
+    {
+      "id": "get_tv_details",
+      "name": "פרטי סדרה",
+      "description": "מחזיר מידע מלא על סדרה ספציפית",
+      "url": "/tv/{tv_id}",
+      "params": {
+        "language": "he-IL",
+        "append_to_response": "credits,videos,similar,recommendations"
+      },
+      "requires_id": true
+    },
+    {
+      "id": "get_trending",
+      "name": "טרנדים",
+      "description": "סרטים וסדרות חמים כרגע",
+      "url": "/trending/all/week",
+      "params": {
+        "language": "he-IL"
+      }
+    },
+    {
+      "id": "get_top_rated",
+      "name": "המדורגים ביותר",
+      "description": "סרטים עם הדירוג הגבוה ביותר",
+      "url": "/movie/top_rated",
+      "params": {
+        "language": "he-IL",
+        "page": 1
+      }
+    },
+    {
+      "id": "get_top_rated_tv",
+      "name": "הסדרות המדורגות ביותר",
+      "description": "סדרות עם הדירוג הגבוה ביותר",
+      "url": "/tv/top_rated",
+      "params": {
+        "language": "he-IL",
+        "page": 1
+      }
+    },
+    {
+      "id": "get_upcoming",
+      "name": "סרטים קרובים",
+      "description": "סרטים שעתידים לצאת בקרוב",
+      "url": "/movie/upcoming",
+      "params": {
+        "language": "he-IL",
+        "page": 1
+      }
+    },
+    {
+      "id": "get_now_playing",
+      "name": "סרטים בקולנוע",
+      "description": "סרטים שמוקרנים כרגע",
+      "url": "/movie/now_playing",
+      "params": {
+        "language": "he-IL",
+        "page": 1
+      }
+    },
+    {
+      "id": "get_popular",
+      "name": "פופולריים",
+      "description": "סרטים פופולריים כרגע",
+      "url": "/movie/popular",
+      "params": {
+        "language": "he-IL",
+        "page": 1
+      }
+    },
+    {
+      "id": "get_popular_tv",
+      "name": "סדרות פופולריות",
+      "description": "סדרות פופולריות כרגע",
+      "url": "/tv/popular",
+      "params": {
+        "language": "he-IL",
+        "page": 1
+      }
+    },
+    {
+      "id": "search_by_year",
+      "name": "חיפוש לפי שנה",
+      "description": "מחפש סרטים משנה מסוימת",
+      "url": "/discover/movie",
+      "params": {
+        "primary_release_year": "{year}",
+        "sort_by": "popularity.desc",
+        "language": "he-IL",
+        "page": 1
+      },
+      "requires_year": true
+    },
+    {
+      "id": "search_by_rating",
+      "name": "חיפוש לפי דירוג",
+      "description": "מחפש סרטים עם דירוג מינימלי",
+      "url": "/discover/movie",
+      "params": {
+        "vote_average.gte": "{rating}",
+        "sort_by": "vote_average.desc",
+        "language": "he-IL",
+        "page": 1
+      },
+      "requires_rating": true
+    },
+    {
+      "id": "search_by_genre_and_year",
+      "name": "חיפוש לפי ז'אנר ושנה",
+      "description": "מחפש סרטים לפי ז'אנר ושנה",
+      "url": "/discover/movie",
+      "params": {
+        "with_genres": "{genre}",
+        "primary_release_year": "{year}",
+        "sort_by": "popularity.desc",
+        "language": "he-IL",
+        "page": 1
+      },
+      "requires_genre_and_year": true
+    },
+    {
+      "id": "get_person_movies",
+      "name": "סרטי שחקן",
+      "description": "מחזיר את כל הסרטים של שחקן מסוים",
+      "url": "/search/person",
+      "params": {
+        "query": "{actor_name}",
+        "language": "he-IL"
+      },
+      "requires_actor": true
+    },
+    {
+      "id": "get_similar_movies",
+      "name": "סרטים דומים",
+      "description": "מחזיר סרטים דומים לסרט מסוים",
+      "url": "/movie/{movie_id}/similar",
+      "params": {
+        "language": "he-IL",
+        "page": 1
+      },
+      "requires_id": true
+    },
+    {
+      "id": "get_recommendations",
+      "name": "המלצות",
+      "description": "מחזיר המלצות מבוססות על סרט",
+      "url": "/movie/{movie_id}/recommendations",
+      "params": {
+        "language": "he-IL",
+        "page": 1
+      },
+      "requires_id": true
+    },
+    {
+      "id": "get_watch_providers",
+      "name": "ספקי צפייה",
+      "description": "איפה אפשר לצפות בסרט",
+      "url": "/movie/{movie_id}/watch/providers",
+      "params": {},
+      "requires_id": true
+    },
+    {
+      "id": "get_oscar_winners",
+      "name": "זוכי אוסקר",
+      "description": "סרטים שזכו באוסקר",
+      "url": "/discover/movie",
+      "params": {
+        "with_watch_monetization_types": "flatrate",
+        "sort_by": "vote_average.desc",
+        "vote_count.gte": 1000,
+        "language": "he-IL",
+        "page": 1
+      }
+    },
+    {
+      "id": "get_family_movies",
+      "name": "סרטים משפחתיים",
+      "description": "סרטים מתאימים לכל המשפחה",
+      "url": "/discover/movie",
+      "params": {
+        "with_genres": 10751,
+        "certification.lte": "PG-13",
+        "sort_by": "popularity.desc",
+        "language": "he-IL",
+        "page": 1
+      }
+    },
+    {
+      "id": "get_movie_by_director",
+      "name": "סרטי במאי",
+      "description": "מחזיר סרטים של במאי מסוים",
+      "url": "/search/person",
+      "params": {
+        "query": "{director_name}",
+        "language": "he-IL"
+      },
+      "requires_director": true
+    },
+    {
+      "id": "get_upcoming_tv",
+      "name": "סדרות קרובות",
+      "description": "סדרות שעתידות לצאת בקרוב",
+      "url": "/discover/tv",
+      "params": {
+        "first_air_date.gte": "{next_month}",
+        "sort_by": "first_air_date.asc",
+        "language": "he-IL",
+        "page": 1
+      }
+    },
+    {
+      "id": "get_airing_today_tv",
+      "name": "סדרות שעולות היום",
+      "description": "פרקים חדשים שעולים היום",
+      "url": "/tv/airing_today",
+      "params": {
+        "language": "he-IL",
+        "page": 1
+      }
+    },
+    {
+      "id": "get_mood_based",
+      "name": "חיפוש לפי מצב רוח",
+      "description": "ממליץ סרטים לפי מצב רוח",
+      "url": "/discover/movie",
+      "params": {
+        "sort_by": "popularity.desc",
+        "language": "he-IL",
+        "page": 1
+      },
+      "requires_mood": true
     }
-  ]
+  ],
+  "mood_mapping": {
+    "עצוב": [18, 10749],
+    "שמח": [35, 10751],
+    "מפחיד": [27, 53],
+    "מרגש": [18, 10749],
+    "מלא אקשן": [28, 12],
+    "חשיבה": [9648, 878],
+    "רומנטי": [10749],
+    "קומי": [35],
+    "הרפתקאות": [12],
+    "מתח": [53, 80]
+  },
+  "response_messages": {
+    "he": {
+      "loading": "⏳ מאחזר נתונים מ-TMDB...",
+      "error_api": "❌ שגיאה בתקשורת עם השרת",
+      "error_no_results": "😢 לא נמצאו תוצאות לחיפוש שלך",
+      "error_invalid_input": "⚠️ אנא הזן טקסט לחיפוש",
+      "error_auth": "🔑 שגיאת אימות מול TMDB",
+      "error_no_id": "❓ לא זיהיתי את השם, אנא היה יותר ספציפי",
+      "success": "✅ נמצאו {count} תוצאות",
+      "movie_details": "🎬 {title}\n📅 שנה: {year}\n⭐ דירוג: {rating}/10\n⏱️ אורך: {runtime} דקות\n🎭 ז'אנרים: {genres}\n📝 תקציר: {overview}\n🎥 טריילר: {trailer}\n👥 שחקנים ראשיים: {cast}\n🎬 במאי: {director}",
+      "providers": "📺 ניתן לצפות ב-{title} ב:\n{providers}",
+      "mood_suggestion": "🎭 לפי מצב הרוח שלך ({mood}), אני ממליץ על:"
+    },
+    "en": {
+      "loading": "⏳ Fetching data from TMDB...",
+      "error_api": "❌ API communication error",
+      "error_no_results": "😢 No results found",
+      "error_invalid_input": "⚠️ Please enter search text",
+      "error_auth": "🔑 TMDB authentication error",
+      "error_no_id": "❓ Could not identify the name, please be more specific",
+      "success": "✅ Found {count} results",
+      "movie_details": "🎬 {title}\n📅 Year: {year}\n⭐ Rating: {rating}/10\n⏱️ Runtime: {runtime} min\n🎭 Genres: {genres}\n📝 Overview: {overview}\n🎥 Trailer: {trailer}\n👥 Cast: {cast}\n🎬 Director: {director}"
+    }
+  },
+  "logic_rules": [
+    {
+      "condition": "user_input.includes('אקשן') || user_input.includes('action')",
+      "action": "get_action_movies"
+    },
+    {
+      "condition": "user_input.includes('קומדיה') || user_input.includes('comedy') || user_input.includes('מצחיק')",
+      "action": "get_comedy_movies"
+    },
+    {
+      "condition": "user_input.includes('אימה') || user_input.includes('horror') || user_input.includes('מפחיד')",
+      "action": "get_horror_movies"
+    },
+    {
+      "condition": "user_input.includes('רומנטי') || user_input.includes('romance') || user_input.includes('אהבה')",
+      "action": "get_romance_movies"
+    },
+    {
+      "condition": "user_input.includes('מדע בדיוני') || user_input.includes('sci fi') || user_input.includes('חלל')",
+      "action": "get_sci_fi_movies"
+    },
+    {
+      "condition": "user_input.includes('דרמה') || user_input.includes('drama')",
+      "action": "get_drama_movies"
+    },
+    {
+      "condition": "user_input.includes('סדרה') || user_input.includes('tv') || user_input.includes('series')",
+      "action": "get_action_tv"
+    },
+    {
+      "condition": "user_input.includes('חפש') || user_input.includes('חיפוש') || user_input.includes('search') || user_input.includes('מצא')",
+      "action": "search_multi",
+      "extract_query": true
+    },
+    {
+      "condition": "user_input.includes('טרנד') || user_input.includes('trending') || user_input.includes('חם')",
+      "action": "get_trending"
+    },
+    {
+      "condition": "user_input.includes('מדורג') || user_input.includes('top rated') || user_input.includes('הכי טוב') || user_input.includes('הטובים ביותר')",
+      "action": "get_top_rated"
+    },
+    {
+      "condition": "user_input.includes('חדש') || user_input.includes('upcoming') || user_input.includes('עתיד') || user_input.includes('יקרה')",
+      "action": "get_upcoming"
+    },
+    {
+      "condition": "user_input.includes('קולנוע') || user_input.includes('cinema') || user_input.includes('עכשיו') || user_input.includes('מוקרן')",
+      "action": "get_now_playing"
+    },
+    {
+      "condition": "user_input.includes('פופולר') || user_input.includes('popular') || user_input.includes('אהוד')",
+      "action": "get_popular"
+    },
+    {
+      "condition": "user_input.includes('פרטים') || user_input.includes('מידע') || user_input.includes('details')",
+      "action": "get_movie_details",
+      "extract_movie_name": true
+    },
+    {
+      "condition": "user_input.includes('דומה') || user_input.includes('similar') || user_input.includes('מזכיר')",
+      "action": "get_similar_movies",
+      "extract_movie_name": true
+    },
+    {
+      "condition": "user_input.includes('המלץ') || user_input.includes('recommend') || user_input.includes('תן לי')",
+      "action": "get_recommendations",
+      "extract_movie_name": true
+    },
+    {
+      "condition": "user_input.includes('אוסקר') || user_input.includes('oscar') || user_input.includes('זוכה')",
+      "action": "get_oscar_winners"
+    },
+    {
+      "condition": "user_input.includes('משפחתי') || user_input.includes('family') || user_input.includes('ילדים')",
+      "action": "get_family_movies"
+    },
+    {
+      "condition": "user_input.includes('מצב רוח') || user_input.includes('mood')",
+      "action": "get_mood_based",
+      "extract_mood": true
+    },
+    {
+      "condition": "user_input.match(/\\d{4}/) && (user_input.includes('שנת') || user_input.includes('מ-'))",
+      "action": "search_by_year",
+      "extract_year": true
+    },
+    {
+      "condition": "user_input.includes('במאי') || user_input.includes('director')",
+      "action": "get_movie_by_director",
+      "extract_director": true
+    },
+    {
+      "condition": "user_input.includes('שחקן') || user_input.includes('actor') || user_input.includes('מככב')",
+      "action": "get_person_movies",
+      "extract_actor": true
+    },
+    {
+      "condition": "user_input.includes('איפה אפשר') || user_input.includes('watch') || user_input.includes('צפייה')",
+      "action": "get_watch_providers",
+      "extract_movie_name": true
+    },
+    {
+      "condition": "user_input.includes('עונה') || user_input.includes('season') || user_input.includes('פרק')",
+      "action": "get_tv_details",
+      "extract_tv_name": true
+    }
+  ],
+  "filters": {
+    "year": {
+      "min": 1900,
+      "max": 2026,
+      "param": "primary_release_year"
+    },
+    "rating": {
+      "min": 0,
+      "max": 10,
+      "param": "vote_average.gte"
+    },
+    "runtime": {
+      "min": 0,
+      "max": 300,
+      "param": "with_runtime.lte"
+    },
+    "language": {
+      "options": ["he", "en", "fr", "es", "ru", "ja", "ko", "hi"],
+      "param": "with_original_language"
+    }
+  },
+  "watch_providers_il": {
+    "netflix": 8,
+    "disney_plus": 337,
+    "amazon_prime": 9,
+    "yes": 86,
+    "hot": 186,
+    "apple_tv": 2,
+    "paramount": 531
+  }
 }
