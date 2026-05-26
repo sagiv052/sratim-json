@@ -1,4 +1,167 @@
 {
+  "version": "1.0.0",
+  "last_updated": "2026-05-26",
+  "tmdb_api_key": "REPLACE_WITH_YOUR_TMDB_API_KEY",
+  "tmdb_access_token": "REPLACE_WITH_YOUR_TMDB_ACCESS_TOKEN",
+  "endpoints": {
+    "base_url": "https://api.themoviedb.org/3",
+    "image_base_url": "https://image.tmdb.org/t/p/w500",
+    "youtube_base_url": "https://www.youtube.com/watch?v=",
+    "genres": {
+      "action": 28,
+      "adventure": 12,
+      "animation": 16,
+      "comedy": 35,
+      "crime": 80,
+      "documentary": 99,
+      "drama": 18,
+      "family": 10751,
+      "fantasy": 14,
+      "history": 36,
+      "horror": 27,
+      "music": 10402,
+      "mystery": 9648,
+      "romance": 10749,
+      "science_fiction": 878,
+      "thriller": 53,
+      "war": 10752,
+      "western": 37,
+      "action_tv": 10759,
+      "sci_fi_tv": 10765
+    }
+  },
+
+  "commands": [
+    {
+      "id": "get_action_movies",
+      "name": "סרטי אקשן",
+      "url": "/discover/movie",
+      "params": { "with_genres": 28, "sort_by": "popularity.desc", "language": "he-IL", "page": 1 }
+    },
+    {
+      "id": "get_action_tv",
+      "name": "סדרות אקשן",
+      "url": "/discover/tv",
+      "params": { "with_genres": 10759, "sort_by": "popularity.desc", "language": "he-IL", "page": 1 }
+    },
+    {
+      "id": "search_movie",
+      "name": "חיפוש סרט",
+      "url": "/search/movie",
+      "params": { "query": "{search_term}", "language": "he-IL", "page": 1 },
+      "requires_input": true
+    },
+    {
+      "id": "search_tv",
+      "name": "חיפוש סדרה",
+      "url": "/search/tv",
+      "params": { "query": "{search_term}", "language": "he-IL", "page": 1 },
+      "requires_input": true
+    },
+    {
+      "id": "search_multi",
+      "name": "חיפוש כללי",
+      "url": "/search/multi",
+      "params": { "query": "{search_term}", "language": "he-IL", "page": 1 },
+      "requires_input": true
+    },
+    {
+      "id": "get_trending",
+      "name": "טרנדים",
+      "url": "/trending/all/week",
+      "params": { "language": "he-IL" }
+    },
+    {
+      "id": "get_popular",
+      "name": "סרטים פופולריים",
+      "url": "/movie/popular",
+      "params": { "language": "he-IL", "page": 1 }
+    },
+    {
+      "id": "get_popular_tv",
+      "name": "סדרות פופולריות",
+      "url": "/tv/popular",
+      "params": { "language": "he-IL", "page": 1 }
+    },
+    {
+      "id": "get_movie_details",
+      "name": "פרטי סרט",
+      "url": "/movie/{movie_id}",
+      "params": { "language": "he-IL", "append_to_response": "credits,videos,similar,recommendations" },
+      "requires_id": true
+    },
+    {
+      "id": "get_tv_details",
+      "name": "פרטי סדרה",
+      "url": "/tv/{tv_id}",
+      "params": { "language": "he-IL", "append_to_response": "credits,videos,similar,recommendations" },
+      "requires_id": true
+    },
+    {
+      "id": "get_mood_based",
+      "name": "המלצה לפי מצב רוח",
+      "url": "/discover/movie",
+      "params": { "sort_by": "popularity.desc", "language": "he-IL", "page": 1 },
+      "requires_mood": true
+    }
+  ],
+
+  "mood_mapping": {
+    "עצוב": [18, 10749],
+    "שמח": [35, 10751],
+    "מפחיד": [27, 53],
+    "מרגש": [18, 10749],
+    "מלא אקשן": [28, 10759],
+    "חשיבה": [9648, 878],
+    "רומנטי": [10749, 10749],
+    "קומי": [35, 35],
+    "הרפתקאות": [12, 12],
+    "מתח": [53, 9648]
+  },
+
+  "response_messages": {
+    "he": {
+      "loading": "⏳ מאחזר נתונים מ-TMDB...",
+      "error_api": "❌ שגיאה בתקשורת עם השרת",
+      "error_no_results": "😢 לא נמצאו תוצאות לחיפוש שלך",
+      "error_invalid_input": "⚠️ אנא הזן טקסט לחיפוש",
+      "success": "✅ נמצאו {count} תוצאות",
+      "movie_details": "🎬 {title}\n📅 שנה: {year}\n⭐ דירוג: {rating}/10\n🎭 ז'אנרים: {genres}\n📝 תקציר: {overview}"
+    },
+    "en": {
+      "loading": "⏳ Fetching data from TMDB...",
+      "error_api": "❌ API communication error",
+      "error_no_results": "😢 No results found",
+      "error_invalid_input": "⚠️ Please enter search text",
+      "success": "✅ Found {count} results"
+    }
+  },
+
+  "logic_rules": [
+    { "condition": "user_input.includes('חפש') || user_input.includes('חיפוש') || user_input.includes('search')", "action": "search_multi", "extract_query": true },
+    { "condition": "user_input.includes('סדרה') || user_input.includes('tv') || user_input.includes('series')", "action": "get_action_tv" },
+    { "condition": "user_input.includes('אקשן')", "action": "get_action_movies" },
+    { "condition": "user_input.includes('קומדיה') || user_input.includes('מצחיק')", "action": "get_comedy_movies" },
+    { "condition": "user_input.includes('אימה') || user_input.includes('מפחיד')", "action": "get_horror_movies" },
+    { "condition": "user_input.includes('טרנד') || user_input.includes('חם')", "action": "get_trending" },
+    { "condition": "user_input.includes('פופולר')", "action": "get_popular" },
+    { "condition": "user_input.match(/\\d{4}/) && (user_input.includes('שנת') || user_input.includes('מ-'))", "action": "search_by_year", "extract_year": true }
+  ],
+
+  "examples": [
+    { "phrase": "תציע לי סדרת מתח", "expected_action": "get_action_tv" },
+    { "phrase": "תציע לי סרט אקשן לא מפחיד", "expected_action": "get_action_movies" },
+    { "phrase": "חפש מטריקס", "expected_action": "search_multi" }
+  ],
+
+  "filters": {
+    "year": { "min": 1900, "max": 2026, "param": "primary_release_year" },
+    "rating": { "min": 0, "max": 10, "param": "vote_average.gte" },
+    "runtime": { "min": 0, "max": 300, "param": "with_runtime.lte" },
+    "language": { "options": ["he", "en", "fr", "es", "ru", "ja", "ko", "hi"], "param": "with_original_language" }
+  }
+}
+{
   "version": "2.0.0",
   "last_updated": "2026-01-15",
   "tmdb_api_key": "2c055b2f4708fe069b3104e21e509cb9",
