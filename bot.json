@@ -1,0 +1,54 @@
+{
+  "version": 2,
+  "defaultResponse": "לא הבנתי. נסה: 'תציע לי סרט אקשן', 'טרנדים', 'חיפוש סרט אינדיאנה ג'ונס'",
+  "commands": [
+    {
+      "keywords": ["תציע", "סרט", "אקשן", "קומדיה", "אימה", "דרמה"],
+      "response": "מחפש סרט מומלץ...",
+      "action": "suggest",
+      "genre": null
+    },
+    {
+      "keywords": ["טרנדים", "פופולרי", "מה חם"],
+      "response": "טוען טרנדים...",
+      "action": "trending",
+      "genre": null
+    },
+    {
+      "keywords": ["חיפוש", "חפש", "סרט"],
+      "response": "איזה סרט לחפש?",
+      "action": "search_movie",
+      "genre": null
+    },
+    {
+      "keywords": ["חיפוש", "חפש", "סדרה"],
+      "response": "איזו סדרה לחפש?",
+      "action": "search_tv",
+      "genre": null
+    },
+    {
+      "keywords": ["טריילר", "תראה טריילר"],
+      "response": "לאיזה סרט?",
+      "action": "trailer",
+      "genre": null
+    },
+    {
+      "keywords": ["שלום", "היי", "מה קורה"],
+      "response": "שלום! 🎬 איך אפשר לעזור?",
+      "action": null,
+      "genre": null
+    },
+    {
+      "keywords": ["תודה", "thanks"],
+      "response": "בכיף! תהנה מהסרט 🍿",
+      "action": null,
+      "genre": null
+    },
+    {
+      "keywords": ["עזרה", "help"],
+      "response": "📋 אני יודע: להציע סרטים לפי ז'אנר, להראות טרנדים, לחפש סרטים/סדרות, ולהביא טריילרים. תנסה!",
+      "action": null,
+      "genre": null
+    }
+  ]
+}
