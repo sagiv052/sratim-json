@@ -670,9 +670,8 @@
     ]
   },
   {
-        ],
-        "name": "קופה ראשית עונה_1"
-      },
+    "name": "קופה ראשית",
+    "seasons": [
       {
         "episodes": [
           {
@@ -756,7 +755,7 @@
             "name": "פרק 1"
           }
         ],
-        "name": "קופה ראשית עונה_2"
+        "name": "עונה 2"
       },
       {
         "episodes": [
@@ -841,7 +840,7 @@
             "name": "פרק 17"
           }
         ],
-        "name": "קופה ראשית עונה_3"
+        "name": "עונה 3"
       },
       {
         "episodes": [
@@ -938,7 +937,7 @@
             "name": "פרק 21"
           }
         ],
-        "name": "קופה ראשית עונה_4"
+        "name": "עונה 4"
       },
       {
         "episodes": [
@@ -1025,7 +1024,7 @@
           {
           }
         ],
-        "name": "קופה ראשית עונה_5"
+        "name": "עונה 5"
       }
     ]
   },
@@ -1647,8 +1646,6 @@
     "seasons": [
       {
         "episodes": [
-          {"
-          },
           {
             "link": "https://drive.google.com/file/d/1sJPEbjI4yPkJkLDbejp_RmZRmNdy1DVl/preview",
             "name": "פרק 1"
@@ -4411,8 +4408,6 @@
           {
             "link": "https://drive.google.com/file/d/11EaM6_ojLNgbxPW3cKrCa7hNUmLy8SyH/preview",
             "name": "פרק 7"
-          },
-          {"
           }
         ],
         "name": "השוטרים 1 פרק 7 הועלה ע\"י  Qbzn לדרייב"
