@@ -1,47 +1,10 @@
-מונדיאל 2026
-שלב הבתים
-תקציר | אוסטריה - ירדן https://www.kan.org.il/content/worldcup/games/autvsjor/s1/1056464/
-המשחק המלא | אוסטריה - ירדן https://www.kan.org.il/content/worldcup/games/autvsjor/s1/1056481/
-תקציר ארגנטינה - אלג'יריה https://www.kan.org.il/content/worldcup/games/argvsalg/s1/1056313/
-המשחק המלא| ארגנטינה - אלג'יריה https://www.kan.org.il/content/worldcup/games/argvsalg/s1/1056333/
-תקציר | חוף השנהב - אקוודור https://www.kan.org.il/content/worldcup/games/civvsecu/s1/1054416/
-המשחק המלא | חוף השנהב - אקוודור https://www.kan.org.il/content/worldcup/games/civvsecu/s1/1054435/
-תקציר | שוודיה - תוניסיה https://www.kan.org.il/content/worldcup/games/swevstun/s1/1054559/
-המשחק המלא | שוודיה - תוניסיה https://www.kan.org.il/content/worldcup/games/swevstun/s1/1054586/
-תקציר | ספרד - כף ורדה https://www.kan.org.il/content/worldcup/games/espvscpv/s1/1055003/
-המשחק המלא | ספרד - כף ורדה https://www.kan.org.il/content/worldcup/games/espvscpv/s1/1055010/
-תקציר | בלגיה - מצרים https://www.kan.org.il/content/worldcup/games/belvsegy/s1/1055196/
-המשחק המלא | בלגיה - מצרים https://www.kan.org.il/content/worldcup/games/belvsegy/s1/1055210/
-תקציר | ערב הסעודית - אורוגוואי https://www.kan.org.il/content/worldcup/games/ksavsuru/s1/1055363/
-המשחק המלא | ערב הסעודית - אורוגוואי https://www.kan.org.il/content/worldcup/games/ksavsuru/s1/1055375/
-תקציר | איראן - ניו זילנד https://www.kan.org.il/content/worldcup/games/irnvsnzl/s1/1055499/
-המשחק המלא | איראן - ניו זילנד https://www.kan.org.il/content/worldcup/games/irnvsnzl/s1/1055489/
-תקציר | צרפת - סנגל https://www.kan.org.il/content/worldcup/games/fravssen/s1/1056030/
-המשחק המלא | צרפת - סנגל https://www.kan.org.il/content/worldcup/games/fravssen/s1/1056049/
-תקציר | עיראק - נורווגיה https://www.kan.org.il/content/worldcup/games/irqvsnor/s1/1056193/
-המשחק המלא | עיראק - נורווגיה https://www.kan.org.il/content/worldcup/games/irqvsnor/s1/1056201/
-תקציר | מקסיקו - דרום אפריקה https://www.kan.org.il/content/worldcup/games/mexvsrsa/s1/1052141/
-משחק מלא | מקסיקו - דרום אפריקה https://www.kan.org.il/content/worldcup/games/mexvsrsa/s1/1052135/
-משחק מלא | קוריאה הדרומית - צ'כיה https://www.kan.org.il/content/worldcup/games/korvscze/s1/1052315/
-תקציר | קוריאה הדרומית - צ'כיה https://www.kan.org.il/content/worldcup/games/korvscze/s1/1052310/
-משחק מלא | קנדה - בוסניה והרצגובינה https://www.kan.org.il/content/worldcup/games/canvsbih/s1/1052742/
-תקציר | קנדה - בוסניה והרצגובינה https://www.kan.org.il/content/worldcup/games/canvsbih/s1/1052725/
-המשחק המלא | ארצות הברית - פרגוואי https://www.kan.org.il/content/worldcup/games/usavspar/s1/1052914/
-תקציר | ארצות הברית - פרגוואי https://www.kan.org.il/content/worldcup/games/usavspar/s1/1052905/
-תקציר | קטאר - שווייץ https://www.kan.org.il/content/worldcup/games/qatvssui/s1/1053248/
-המשחק המלא | קטאר - שווייץ https://www.kan.org.il/content/worldcup/games/qatvssui/s1/1053264/
-תקציר | ברזיל - מרוקו https://www.kan.org.il/content/worldcup/games/bravsmar/s1/1053399/
-המשחק המלא | ברזיל - מרוקו https://www.kan.org.il/content/worldcup/games/bravsmar/s1/1053414/
-תקציר | האיטי - סקוטלנד https://www.kan.org.il/content/worldcup/games/haivssco/s1/1053508/
-המשחק המלא | האיטי - סקוטלנד https://www.kan.org.il/content/worldcup/games/haivssco/s1/1053526/
-תקציר | אוסטרליה - טורקיה https://www.kan.org.il/content/worldcup/games/ausvstur/s1/1053659/
-המשחק המלא | אוסטרליה - טורקיה https://www.kan.org.il/content/worldcup/games/ausvstur/s1/1053683/
-תקציר | גרמניה - קורסאו https://www.kan.org.il/content/worldcup/games/gervscur/s1/1054098/
-המשחק המלא | גרמניה - קורסאו https://www.kan.org.il/content/worldcup/games/gervscur/s1/1054104/
-תקציר | הולנד - יפן https://www.kan.org.il/content/worldcup/games/nedvsjpn/s1/1054297/
-המשחק המלא | הולנד - יפן https://www.kan.org.il/content/worldcup/games/nedvsjpn/s1/1054317/
-תקציר | פורטוגל - קונגו https://www.kan.org.il/content/worldcup/games/porvscod/s1/1057264/
-המשחק המלא | פורטוגל - קונגו https://www.kan.org.il/content/worldcup/games/porvscod/s1/1056866/
+il/content/worldcup/games/engvscro/s1/1057243/
+המשחק המלא | אנגליה - קרואטיה https://www.kan.org.il/content/worldcup/games/engvscro/s1/1057098/
+תקציר: גאנה - פנמה https://www.kan.org.il/content/worldcup/games/ghavspan/s1/1057231/
+המשחק המלא | גאנה - פנמה https://www.kan.org.il/content/worldcup/games/ghavspan/s1/1057196/
+תקציר | אוזבקיסטן - קולומביה https://www.kan.org.il/content/worldcup/games/uzbvscol/s1/1057338/
+משחק מלא | אוזבקיסטן - קולומביה https://www.kan.org.il/content/worldcup/games/uzbvscol/s1/1057334/
+
 
 שמינית גמר
 
@@ -109,3 +72,23 @@
 גמר
 גרמניה - ארגנטינה | המשחק המלא https://www.kan.org.il/content/worldcup/classics/gervsarg/s1/1030615/
 גרמניה - ארגנטינה | תקציר https://www.kan.org.il/content/worldcup/classics/gervsarg/s1/1030580/
+
+מונדיאל 2010
+שלב הבתים
+אין כרגע
+
+שמינית גמר
+גרמניה - אנגליה | המשחק המלא https://www.kan.org.il/content/worldcup/classics/gervseng/s1/1027883/
+גרמניה - אנגליה | תקציר https://www.kan.org.il/content/worldcup/classics/gervseng/s1/1027828/ 
+
+רבע גמר
+ אין כרגע
+
+חצי גמר
+הולנד - אורוגוואי | המשחק המלא 
+https://www.kan.org.il/content/worldcup/classics/nedvsuru/s1/1028038 
+הולנד - אורוגוואי | תקציר https://www.kan.org.il/content/worldcup/classics/nedvsuru/s1/1027956/ 
+
+גמר
+ספרד - הולנד | המשחק המלא https://www.kan.org.il/content/worldcup/classics/espvsned/s1/1030678/
+ספרד - הולנד | תקציר https://www.kan.org.il/content/worldcup/classics/espvsned/s1/1028001/
