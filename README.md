@@ -1,0 +1,40 @@
+📁 מחלץ קבצים מ-Google Drive
+
+חלץ שמות קבצים וקישורים מתיקיות ציבוריות ב-Drive
+
+📥 התקנה
+
+1. ✅ התקן Python 3.11 ומעלה מ-[python.org](https://www.python.org/downloads/)
+
+2. 💾 שמור את הקוד בתור `extract_drive.py`
+
+3. 📦 התקן Playwright:
+pip install playwright
+python -m playwright install chromium
+
+
+🚀 הפעלה
+
+הפעל בטרמינל:
+py extract_drive.py
+
+הדבק את הקישור כשיתבקש:
+הכנס קישור או Folder ID: https://drive.google.com/drive/folders/FOLDER_ID
+
+או עם קישור ישיר:
+py extract_drive.py "https://drive.google.com/drive/folders/FOLDER_ID"
+
+
+📊 פלט
+קובץ: `drive_files_FOLDER_ID_[timestamp].txt`
+
+עמודות: `FILE_NAME` | `FILE_URL`
+
+
+❗ פתרון בעיות
+אם מופיע "לא נמצאו קבצים":
+- 🔍 ודא שהתיקייה ציבורית
+- 📂 ודא שיש קבצים תקינים בתיקייה
+- py extract_drive.py --browser נסה להריץ ככה
+
+⚠️ עובד רק על תיקיות ציבוריות! 
