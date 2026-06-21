@@ -285,6 +285,28 @@ def parse_html(content: str) -> list[tuple[str, str]]:
     return entries
 
 
+def extract_folder_title(content: str) -> str:
+    """חלץ את שם התיקייה מתוך HTML של העמוד"""
+    title_match = re.search(r'<title>(.*?)</title>', content, re.IGNORECASE | re.DOTALL)
+    if title_match:
+        title = clean_text(title_match.group(1))
+        if title:
+            return title
+
+    patterns = [
+        r'<(?:div|h1|span)[^>]*\bclass=["\'][^"\']*(?:title|folder-title|drive-title|doc-title|entry-title)[^"\']*["\'][^>]*>(.*?)</(?:div|h1|span)>',
+        r'<meta[^>]*property=["\']og:title["\'][^>]*content=["\']([^"\']+)["\']',
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, content, re.IGNORECASE | re.DOTALL)
+        if match:
+            title = clean_text(match.group(1))
+            if title:
+                return title
+
+    return ''
+
+
 def extract_subfolder_links(content: str) -> list[tuple[str, str]]:
     """חלץ ID ושמות של תיקיות משנה"""
     subfolders: list[tuple[str, str]] = []
@@ -317,66 +339,94 @@ def extract_subfolder_links(content: str) -> list[tuple[str, str]]:
 def collect_folder_entries(
     folder_id: str,
     use_browser: bool = False,
-) -> list[tuple[str, str]]:
+    html_content: Optional[str] = None,
+) -> tuple[list[tuple[str, str]], str]:
     """אסוף קבצים מתיקייה וסרוק תיקיות משנה"""
     entries: list[tuple[str, str]] = []
     visited: set[str] = set()
-    
-    def process_folder(fid: str, prefix: str = "") -> None:
+    root_title = ''
+
+    def process_folder(fid: str, prefix: str = "", html_text: Optional[str] = None) -> None:
+        nonlocal root_title
         if fid in visited:
             return
         visited.add(fid)
-        
+
         print(f"📂 עיבוד תיקייה: {fid} (prefix: {prefix or '/'})")
-        
-        html_content = download_html(fid)
-        browser_used = False
-        if html_content is None and use_browser:
-            html_content = render_html_with_playwright(fid)
+
+        if html_text is None:
+            html_text = download_html(fid)
+            browser_used = False
+        else:
+            browser_used = False
+
+        if html_text is None and use_browser:
+            html_text = render_html_with_playwright(fid)
             browser_used = True
-        
-        if not html_content:
+
+        if not html_text:
             return
-        
+
+        if fid == folder_id and not root_title:
+            root_title = extract_folder_title(html_text) or folder_id
+
         # חלץ קבצים
-        folder_entries = parse_html(html_content)
+        folder_entries = parse_html(html_text)
         if prefix:
             folder_entries = [(f"{prefix}{name}", url) for name, url in folder_entries]
         entries.extend(folder_entries)
-        
+
         # סרוק תיקיות משנה
-        subfolders = extract_subfolder_links(html_content)
+        subfolders = extract_subfolder_links(html_text)
 
         # אם אין תוצאות ברורות, נסה עוד פעם עם רינדור דפדפן
         if use_browser and not browser_used and (not folder_entries or not subfolders):
             browser_html_content = render_html_with_playwright(fid)
-            if browser_html_content and browser_html_content != html_content:
+            if browser_html_content and browser_html_content != html_text:
                 print("⚠️ לא נמצאו מספיק פריטים ב-HTML הסטטי, מנסה שוב עם דפדפן...")
-                html_content = browser_html_content
+                html_text = browser_html_content
                 browser_used = True
-                folder_entries = parse_html(html_content)
+                folder_entries = parse_html(html_text)
                 if prefix:
                     folder_entries = [(f"{prefix}{name}", url) for name, url in folder_entries]
                 entries.extend(folder_entries)
-                subfolders = extract_subfolder_links(html_content)
+                subfolders = extract_subfolder_links(html_text)
 
         for subfolder_id, subfolder_title in subfolders:
             new_prefix = f"{prefix}{subfolder_title}/"
             process_folder(subfolder_id, new_prefix)
-    
-    process_folder(folder_id)
-    return entries
+
+    process_folder(folder_id, html_text=html_content)
+    return entries, root_title
 
 
-def save_txt(entries: list[tuple[str, str]], folder_id: str) -> str:
+def save_txt(entries: list[tuple[str, str]], folder_id: str, root_title: str) -> str:
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
     output_file = f"drive_files_{folder_id}_{timestamp}.txt"
-    
+
+    grouped_entries: dict[str, list[tuple[str, str]]] = {}
+    for name, url in entries:
+        if '/' in name:
+            folder_path, file_name = name.rsplit('/', 1)
+        else:
+            folder_path, file_name = '.', name
+        grouped_entries.setdefault(folder_path, []).append((file_name, url))
+
     with open(output_file, 'w', encoding='utf-8') as f:
-        f.write("FILE_NAME\tFILE_URL\n")
-        for name, url in entries:
-            f.write(f"{name}\t{url}\n")
-    
+        if root_title:
+            f.write(f'תיקייה עליונה: {root_title}\n\n')
+
+        for folder_path in sorted(grouped_entries):
+            if folder_path == '.':
+                f.write('תיקייה ראשית:\n')
+            else:
+                f.write(f'תיקייה משנה: {folder_path}\n')
+
+            f.write('FILE_NAME\tFILE_URL\n')
+            for file_name, url in grouped_entries[folder_path]:
+                f.write(f'{file_name}\t{url}\n')
+            f.write('\n')
+
     return output_file
 
 
@@ -424,17 +474,18 @@ def main():
             print()
             print("🔍 ניתוח קבצים מ-HTML...")
             entries = parse_html(html_content)
+            root_title = extract_folder_title(html_content) or folder_id
             if entries:
                 subfolders = extract_subfolder_links(html_content)
                 for subfolder_id, subfolder_title in subfolders:
                     print(f"📂 נמצאה תיקייה משנה: {subfolder_title}")
-                    sub_entries = collect_folder_entries(
+                    sub_entries, _ = collect_folder_entries(
                         subfolder_id,
                         use_browser=args.browser or playwright_available,
                     )
                     entries.extend((f"{subfolder_title}/{name}", url) for name, url in sub_entries)
         else:
-            entries = collect_folder_entries(
+            entries, root_title = collect_folder_entries(
                 folder_id,
                 use_browser=args.browser or playwright_available,
             )
@@ -444,7 +495,7 @@ def main():
             print()
             print("⚠️  לא נמצאו קבצים, משתמש בדפדפן...")
             print()
-            entries = collect_folder_entries(
+            entries, root_title = collect_folder_entries(
                 folder_id,
                 use_browser=True,
             )
@@ -458,7 +509,7 @@ def main():
                 print("   - Playwright לא מותקן. התקן: pip install playwright")
             return 1
         
-        output_file = save_txt(entries, folder_id)
+        output_file = save_txt(entries, folder_id, root_title)
         
         print()
         print("=" * 60)
