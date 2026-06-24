@@ -12,19 +12,41 @@ import html
 import urllib.request
 from typing import Any, Callable, Optional, Dict, List, Tuple, Set
 import concurrent.futures
-from collections import defaultdict
 
 # ===== Playwright =====
 sync_playwright: Optional[Callable[..., Any]] = None
 playwright_available = False
 try:
-    from playwright.sync_api import sync_playwright as _sync_playwright
+    from playwright.sync_api import sync_playwright as _sync_playwright  # type: ignore
     sync_playwright = _sync_playwright
     playwright_available = True
 except ImportError:
     pass
 
 # ===== פונקציות בסיסיות =====
+
+def clean_chat_text(text: str) -> str:
+    """מנקה טקסט מהודעות צ'אט - מסיר תאריכים, שמות שולחים, וכו'"""
+    lines = text.split('\n')
+    cleaned_lines: List[str] = []
+    
+    for line in lines:
+        if re.match(r'^\[\d{2}/\d{2}/\d{4}\s+\d{2}:\d{2}\]', line):
+            parts = line.split(']', 1)
+            if len(parts) > 1:
+                line = parts[1].strip()
+            else:
+                continue
+        
+        line = re.sub(r'^[א-תa-zA-Z]+\s+[א-תa-zA-Z]+:', '', line)
+        line = re.sub(r'^[א-תa-zA-Z]+:', '', line)
+        line = re.sub(r'\[\d{2}/\d{2}/\d{4}\s+\d{2}:\d{2}\]', '', line)
+        line = line.strip()
+        if line:
+            cleaned_lines.append(line)
+    
+    return '\n'.join(cleaned_lines)
+
 def extract_folder_id(input_str: str) -> Optional[str]:
     """חלץ folder ID מקישור או זהה ID ישירות - תומך בכל הפורמטים"""
     input_str = input_str.strip()
@@ -44,25 +66,31 @@ def extract_folder_id(input_str: str) -> Optional[str]:
         return input_str
     return None
 
-def extract_all_links(text: str) -> List[str]:
-    """מזהה את כל סוגי קישורי Drive בטקסט"""
-    links: List[str] = []
+def extract_all_links(text: str) -> List[Tuple[str, str]]:
+    """מזהה את כל קישורי Drive בטקסט ומחזיר (קישור, הקשר)"""
+    links: List[Tuple[str, str]] = []
     seen: Set[str] = set()
     
-    patterns = [
-        r'drive\.google\.com/(?:drive/)?folders?/([a-zA-Z0-9_-]+)',
-        r'drive\.google\.com/open\?id=([a-zA-Z0-9_-]+)',
-        r'drive\.google\.com/file/d/([a-zA-Z0-9_-]+)',
-        r'folderview\?id=([a-zA-Z0-9_-]+)',
-        r'id=([a-zA-Z0-9_-]{20,})',
-    ]
+    link_pattern = r'(https?://(?:drive\.google\.com|www\.drive\.google\.com)[^\s"\'<>)]+)'
     
-    for pattern in patterns:
-        matches = re.findall(pattern, text)
-        for match in matches:
-            if match not in seen:
-                seen.add(match)
-                links.append(match)
+    for match in re.finditer(link_pattern, text):
+        url = match.group(0).strip()
+        url = re.sub(r'[.,;:!?]$', '', url)
+        
+        start = match.start()
+        context_start = max(0, start - 100)
+        context = text[context_start:start].strip()
+        
+        context = re.sub(r'\[\d{2}/\d{2}/\d{4}\s+\d{2}:\d{2}\]', '', context)
+        context = re.sub(r'^[א-תa-zA-Z]+\s+[א-תa-zA-Z]+:', '', context)
+        context = re.sub(r'^[א-תa-zA-Z]+:', '', context)
+        context = context.strip()
+        
+        folder_id = extract_folder_id(url)
+        
+        if folder_id and folder_id not in seen:
+            seen.add(folder_id)
+            links.append((url, context))
     
     return links
 
@@ -184,6 +212,7 @@ def extract_folder_title(content: str) -> str:
     if title_match:
         title = clean_text(title_match.group(1))
         if title:
+            title = re.sub(r'\s*[-–—]\s*(?:Google Drive|Google\s*Drive|Drive)$', '', title)
             return title
     
     patterns = [
@@ -195,10 +224,32 @@ def extract_folder_title(content: str) -> str:
         if match:
             title = clean_text(match.group(1))
             if title:
+                title = re.sub(r'\s*[-–—]\s*(?:Google Drive|Google\s*Drive|Drive)$', '', title)
                 return title
     return ''
 
-# ===== פונקציות לסדרות =====
+def extract_subfolder_links(content: str) -> List[Tuple[str, str]]:
+    """חלץ ID ושמות של תיקיות משנה"""
+    subfolders: List[Tuple[str, str]] = []
+    seen_ids: Set[str] = set()
+    
+    anchor_pattern = re.compile(
+        r'<a[^>]*href=["\']([^"\']+)["\'][^>]*>(.*?)</a>',
+        re.DOTALL | re.IGNORECASE,
+    )
+    
+    for match in anchor_pattern.finditer(content):
+        href = match.group(1).strip()
+        if not re.search(r'(?:/folders/|/drive/u/\d+/folders/|embeddedfolderview\?id=|^folders/|^embeddedfolderview\?id=)', href, re.IGNORECASE):
+            continue
+        
+        folder_id = extract_folder_id(href)
+        if folder_id and folder_id not in seen_ids:
+            seen_ids.add(folder_id)
+            title = extract_title_from_anchor(match.group(2)) or folder_id
+            subfolders.append((folder_id, title))
+    
+    return subfolders
 
 def parse_season_episode(name: str) -> Tuple[Optional[int], Optional[int]]:
     """מחלץ עונה ופרק משם - תומך בכל הפורמטים"""
@@ -227,35 +278,12 @@ def parse_season_episode(name: str) -> Tuple[Optional[int], Optional[int]]:
     
     return season, episode
 
-def extract_series_name(text: str) -> str:
-    """מחלץ את שם הסדרה מהטקסט"""
-    lines = text.split('\n')
-    
-    for line in lines:
-        if '🎬' in line:
-            name = line.split('🎬')[-1].strip()
-            if name:
-                name = re.sub(r'[<>:"/\\|?*]', '', name)
-                name = name.strip()
-                if name:
-                    return name
-    
-    for line in lines:
-        match = re.search(r'(?:שם\s*הסדרה|סדרה)\s*[:]?\s*(.+)', line, re.IGNORECASE)
-        if match:
-            name = match.group(1).strip()
-            name = re.sub(r'[<>:"/\\|?*]', '', name)
-            if name:
-                return name
-    
-    return "סדרה"
-
 def collect_series_entries(
     folder_id: str,
     use_browser: bool = False,
     html_content: Optional[str] = None,
 ) -> Tuple[Dict[int, List[Tuple[str, str]]], str]:
-    """אוסף קבצים ומארגן לפי עונות"""
+    """אוסף קבצים ומארגן לפי עונות - כולל תיקיות משנה"""
     all_entries: Dict[int, List[Tuple[str, str]]] = {}
     visited: Set[str] = set()
     root_title = ''
@@ -282,6 +310,7 @@ def collect_series_entries(
         if fid == folder_id and not root_title:
             root_title = extract_folder_title(html_text) or folder_id
 
+        # חלץ קבצים מהתיקייה הנוכחית
         folder_entries = parse_html(html_text)
         
         for name, url in folder_entries:
@@ -297,10 +326,36 @@ def collect_series_entries(
                 all_entries[season] = []
             all_entries[season].append((name, url))
 
+        # חלץ תיקיות משנה (עונות) וטפל בהן
+        subfolders = extract_subfolder_links(html_text)
+        for subfolder_id, subfolder_title in subfolders:
+            # בדוק אם זו תיקיית עונה
+            season_match = re.search(r'עונה\s*(\d+)', subfolder_title, re.IGNORECASE)
+            if season_match:
+                season_num = int(season_match.group(1))
+                # הורד את HTML של תיקיית העונה
+                sub_html = download_html(get_embedded_url(subfolder_id))
+                if not sub_html:
+                    sub_html = download_html(get_folder_url(subfolder_id))
+                if sub_html:
+                    sub_entries = parse_html(sub_html)
+                    for name, url in sub_entries:
+                        _, episode = parse_season_episode(name)
+                        if episode is None:
+                            ep_match = re.search(r'פרק\s*(\d+)', name, re.IGNORECASE)
+                            if ep_match:
+                                episode = int(ep_match.group(1))
+                        if season_num not in all_entries:
+                            all_entries[season_num] = []
+                        all_entries[season_num].append((name, url))
+            else:
+                # אם לא מזוהה כעונה, נכנס לתיקייה (רקורסיה)
+                process_folder(subfolder_id, subfolder_title)
+
     process_folder(folder_id, html_text=html_content)
     return all_entries, root_title
 
-def calculate_optimal_workers(links: List[str]) -> int:
+def calculate_optimal_workers(links: List[Tuple[str, str]]) -> int:
     """מחשב מספר חוטים אופטימלי לפי כמות הקישורים"""
     count = len(links)
     
@@ -315,88 +370,102 @@ def calculate_optimal_workers(links: List[str]) -> int:
     else:
         return 12
 
-def process_series_parallel(folder_links: List[str], use_browser: bool = False, max_workers: Optional[int] = None) -> Dict[int, List[Tuple[str, str]]]:
-    """מעבד סדרות במקביל"""
+def process_series_parallel(
+    folder_links: List[Tuple[str, str]], 
+    use_browser: bool = False, 
+    max_workers: Optional[int] = None
+) -> Dict[str, Dict[int, List[Tuple[str, str]]]]:
+    """מעבד סדרות במקביל - מחזיר מילון עם שם הסדרה והעונות"""
     if max_workers is None:
         max_workers = calculate_optimal_workers(folder_links)
     
-    all_entries: Dict[int, List[Tuple[str, str]]] = defaultdict(list)
+    all_series: Dict[str, Dict[int, List[Tuple[str, str]]]] = {}
     
     print(f"\n🚀 מעבד {len(folder_links)} סדרות במקביל ({max_workers} חוטים)...")
     
+    def process_one(link_info: Tuple[str, str]) -> Tuple[str, Dict[int, List[Tuple[str, str]]]]:
+        url, context = link_info
+        fid = extract_folder_id(url)
+        if not fid:
+            return context or "סדרה ללא שם", {}
+        
+        entries, title = collect_series_entries(fid, use_browser)
+        series_name = title or context or f"סדרה {fid[:8]}"
+        
+        # נקה את שם הסדרה
+        series_name = re.sub(r'\[\d{2}/\d{2}/\d{4}\s+\d{2}:\d{2}\]', '', series_name)
+        series_name = re.sub(r'^[א-תa-zA-Z]+\s+[א-תa-zA-Z]+:', '', series_name)
+        series_name = series_name.strip()
+        
+        if not series_name:
+            series_name = f"סדרה {fid[:8]}"
+        
+        return series_name, entries
+    
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-        future_to_fid = {
-            executor.submit(collect_series_entries, fid, use_browser): fid 
-            for fid in folder_links
+        future_to_info = {
+            executor.submit(process_one, link_info): link_info 
+            for link_info in folder_links
         }
         
         completed = 0
         total = len(folder_links)
         
-        for future in concurrent.futures.as_completed(future_to_fid):
-            fid = future_to_fid[future]
+        for future in concurrent.futures.as_completed(future_to_info):
             completed += 1
+            link_info = future_to_info[future]
             try:
-                entries, title = future.result()
+                series_name, entries = future.result()
                 if entries:
-                    # אסוף את כל הקבצים מהעונות
-                    all_files: List[Tuple[str, str]] = []
-                    for season_files in entries.values():
-                        all_files.extend(season_files)
-                    
-                    for season, files in entries.items():
-                        all_entries[season].extend(files)
-                    print(f"   ✅ [{completed}/{total}] סיים: {title or fid[:10]}... ({len(all_files)} קבצים)")
+                    all_series[series_name] = entries
+                    total_files = sum(len(files) for files in entries.values())
+                    print(f"   ✅ [{completed}/{total}] סיים: {series_name} ({total_files} קבצים)")
                 else:
-                    print(f"   ⚠️ [{completed}/{total}] לא נמצאו קבצים: {fid[:10]}...")
+                    print(f"   ⚠️ [{completed}/{total}] לא נמצאו קבצים: {series_name}")
             except Exception as e:
-                print(f"   ❌ [{completed}/{total}] שגיאה ב-{fid[:10]}...: {e}")
+                print(f"   ❌ [{completed}/{total}] שגיאה: {e}")
     
-    return dict(all_entries)
+    return all_series
 
-def format_series_output(series_text: str, entries: Dict[int, List[Tuple[str, str]]]) -> str:
-    """מייצר את הפלט בפורמט נקי"""
-    lines = series_text.split('\n')
-    header_lines: List[str] = []
+def format_series_output(all_series: Dict[str, Dict[int, List[Tuple[str, str]]]]) -> str:
+    """מייצר את הפלט בפורמט נקי - עם כותרות סדרות"""
+    output_parts: List[str] = []
     
-    for line in lines:
-        if re.search(r'drive\.google\.com', line):
-            break
-        header_lines.append(line)
-    
-    output = '\n'.join(header_lines).strip()
-    
-    for season in sorted(entries.keys()):
-        output += f"\n\nעונה {season}"
+    for series_name in sorted(all_series.keys()):
+        entries = all_series[series_name]
         
-        files = sorted(entries[season], key=lambda x: parse_season_episode(x[0])[1] or 0)
+        # כותרת הסדרה
+        output_parts.append(f"🎬 {series_name}")
+        output_parts.append("=" * 40)
         
-        for name, url in files:
-            _, episode = parse_season_episode(name)
-            if episode:
-                output += f"\nפרק {episode}\n{url}"
-            else:
-                clean_name = re.sub(r'עונה\s*\d+\s*', '', name, flags=re.IGNORECASE).strip()
-                clean_name = re.sub(r'פרק\s*\d+\s*', '', clean_name, flags=re.IGNORECASE).strip()
-                if clean_name:
-                    output += f"\n{clean_name}\n{url}"
+        for season in sorted(entries.keys()):
+            output_parts.append(f"\nעונה {season}")
+            
+            files = sorted(entries[season], key=lambda x: parse_season_episode(x[0])[1] or 0)
+            
+            for name, url in files:
+                _, episode = parse_season_episode(name)
+                if episode:
+                    output_parts.append(f"פרק {episode}")
                 else:
-                    output += f"\n{url}"
+                    clean_name = re.sub(r'עונה\s*\d+\s*', '', name, flags=re.IGNORECASE).strip()
+                    clean_name = re.sub(r'פרק\s*\d+\s*', '', clean_name, flags=re.IGNORECASE).strip()
+                    if clean_name:
+                        output_parts.append(clean_name)
+                    else:
+                        output_parts.append("קובץ")
+                output_parts.append(url)
+        
+        output_parts.append("")  # שורה ריקה בין סדרות
     
-    return output
+    return '\n'.join(output_parts)
 
-def save_series_txt(series_text: str, entries: Dict[int, List[Tuple[str, str]]]) -> str:
-    """שומר את הפלט עם שם הסדרה"""
-    series_name = extract_series_name(series_text)
-    series_name = re.sub(r'[<>:"/\\|?*]', '', series_name).strip()
-    
-    if not series_name:
-        series_name = f"series_{datetime.now().strftime('%Y%m%d')}"
-    
+def save_series_txt(all_series: Dict[str, Dict[int, List[Tuple[str, str]]]]) -> str:
+    """שומר את הפלט בקובץ"""
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    output_file = f"{series_name}_{timestamp}.txt"
+    output_file = f"series_{timestamp}.txt"
     
-    output = format_series_output(series_text, entries)
+    output = format_series_output(all_series)
     
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(output)
@@ -430,7 +499,7 @@ def get_series_text_from_user() -> str:
 
 def main():
     parser = argparse.ArgumentParser(
-        description='מחלץ סדרות מ-Google Drive - מהיר וחכם',
+        description='מחלץ סדרות מ-Google Drive - עם זיהוי שמות תיקיות',
         epilog='דוגמה: python sdarot.py'
     )
     parser.add_argument('--browser', action='store_true', help='השתמש ב-Playwright (לעמודים דינמיים)')
@@ -454,28 +523,33 @@ def main():
         print("❌ לא הוכנס טקסט")
         return 1
     
-    # שלב 2: מצא קישורים
+    # שלב 2: נקה טקסט מצ'אט
+    cleaned_text = clean_chat_text(series_text)
+    
+    # שלב 3: מצא קישורים
     print("\n🔍 מזהה קישורים...")
     
-    folder_links = extract_all_links(series_text)
+    folder_links = extract_all_links(cleaned_text)
     
     if not folder_links:
         print("❌ לא נמצאו קישורים תקינים")
         return 1
     
-    # שלב 3: קבע מספר חוטים אוטומטית
+    print(f"✅ נמצאו {len(folder_links)} קישורים")
+    
+    # שלב 4: קבע מספר חוטים אוטומטית
     if args.workers:
         workers = args.workers
-        print(f"📊 נמצאו {len(folder_links)} קישורים (משתמש ב-{workers} חוטים לפי בקשתך)")
+        print(f"📊 משתמש ב-{workers} חוטים לפי בקשתך")
     else:
         workers = calculate_optimal_workers(folder_links)
-        print(f"📊 נמצאו {len(folder_links)} קישורים (משתמש ב-{workers} חוטים אוטומטית)")
+        print(f"📊 משתמש ב-{workers} חוטים אוטומטית")
     
-    # שלב 4: עבד תיקיות במקביל
+    # שלב 5: עבד תיקיות במקביל
     use_browser = args.browser or playwright_available
-    all_entries = process_series_parallel(folder_links, use_browser, workers)
+    all_series = process_series_parallel(folder_links, use_browser, workers)
     
-    if not all_entries:
+    if not all_series:
         print("❌ לא נמצאו קבצים. סיבות אפשריות:")
         print("   - התיקייה פרטית או דורשת התחברות")
         print("   - Google שינתה את מבנה העמוד")
@@ -484,32 +558,33 @@ def main():
             print("   - Playwright לא מותקן. התקן: pip install playwright")
         return 1
     
-    # שלב 5: שמור
-    total_files = sum(len(files) for files in all_entries.values())
+    # שלב 6: שמור
+    total_series = len(all_series)
+    total_files = sum(sum(len(files) for files in entries.values()) for entries in all_series.values())
     
     if args.output:
         output_file = args.output
-        output = format_series_output(series_text, all_entries)
+        output = format_series_output(all_series)
         Path(args.output).write_text(output, encoding='utf-8')
     else:
-        output_file = save_series_txt(series_text, all_entries)
+        output_file = save_series_txt(all_series)
     
     print()
     print("=" * 60)
     print("✅ הצלחה!")
     print("=" * 60)
-    print(f"📊 נמצא: {total_files} קבצים ב-{len(all_entries)} עונות")
+    print(f"📊 נמצאו: {total_series} סדרות, {total_files} קבצים")
     print(f"💾 שמור ל: {output_file}")
     print()
     print("תצוגה מקדימה:")
-    output_preview = format_series_output(series_text, all_entries)
-    preview_lines = output_preview.splitlines()[:15]
+    output_preview = format_series_output(all_series)
+    preview_lines = output_preview.splitlines()[:20]
     for line in preview_lines:
         if line.strip():
             print(f"  {line}")
     output_lines = output_preview.splitlines()
-    if len(output_lines) > 15:
-        print(f"  ... ועוד {len(output_lines) - 15} שורות")
+    if len(output_lines) > 20:
+        print(f"  ... ועוד {len(output_lines) - 20} שורות")
     print()
     print("=" * 60)
     
