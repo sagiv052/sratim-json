@@ -262,9 +262,7 @@
 המשחק המלא | קולומביה - גאנה https://www.kan.org.il/content/worldcup/games/game87/s1/1070568/
 תקציר | קולומביה - גאנה https://www.kan.org.il/content/worldcup/games/game87/s1/1070570/
 
-
-
-מונדיאל 2026 - שמינית גמר
+שמינית גמר
 תקציר מורחב | קנדה - מרוקו https://www.kan.org.il/content/worldcup/games/game90/s1/1070803/
 המשחק המלא | קנדה - מרוקו https://www.kan.org.il/content/worldcup/games/game90/s1/1070817/
 תקציר | קנדה - מרוקו https://www.kan.org.il/content/worldcup/games/game90/s1/1070885/
@@ -272,20 +270,17 @@
 המשחק המלא | פרגוואי-צרפת https://www.kan.org.il/content/worldcup/games/game89/s1/1070940/
 תקציר | פרגוואי - צרפת https://www.kan.org.il/content/worldcup/games/game89/s1/1070962/
 
-
-מונדיאל 2026 - רבע גמר
-
-אין כרגע
-
-מונדיאל 2026 - חצי גמר
+רבע גמר
 
 אין כרגע
 
-מונדיאל 2026 - גמר
+חצי גמר
 
 אין כרגע
 
----
+גמר
+
+אין כרגע
 
 מונדיאל 2022
 
